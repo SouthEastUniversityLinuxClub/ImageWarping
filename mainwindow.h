@@ -42,6 +42,8 @@ private slots:
 
     void on_actionIDW_triggered();
 
+    void on_actionRBF_triggered();
+
 private:
     Ui::MainWindow *ui;
     MainView* view;

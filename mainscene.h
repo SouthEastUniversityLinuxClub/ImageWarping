@@ -9,6 +9,7 @@
 #include <QGraphicsItemGroup>
 #include <QMessageBox>
 #include "idw.h"
+#include "rbf.h"
 
 class MainScene : public QGraphicsScene
 {
@@ -27,6 +28,7 @@ public:
     void mirrorV();
     void deleteALL();
     void idwFunc();
+    void rbfFunc();
 
 
     QPoint start,end;
@@ -37,6 +39,7 @@ public:
     QGraphicsItemGroup* group;
     QString path;
     IDW idw;
+    RBF rbf;
     bool editable;
 };
 

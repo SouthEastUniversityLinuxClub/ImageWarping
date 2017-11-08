@@ -28,13 +28,15 @@ SOURCES += \
         mainwindow.cpp \
     mainview.cpp \
     mainscene.cpp \
-    idw.cpp
+    idw.cpp \
+    rbf.cpp
 
 HEADERS += \
         mainwindow.h \
     mainview.h \
     mainscene.h \
-    idw.h
+    idw.h \
+    rbf.h
 
 FORMS += \
         mainwindow.ui

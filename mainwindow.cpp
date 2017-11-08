@@ -135,3 +135,8 @@ void MainWindow::on_actionIDW_triggered()
 {
     scene->idwFunc();
 }
+
+void MainWindow::on_actionRBF_triggered()
+{
+    scene->rbfFunc();
+}

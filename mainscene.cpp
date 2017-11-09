@@ -4,7 +4,7 @@ MainScene::MainScene()
 {
     group = createItemGroup(*(new QList<QGraphicsItem*>));
     pixmapItem = new QGraphicsPixmapItem();
-//    idw = IDW(starts,ends);
+    //    idw = IDW(starts,ends);
     editable = false;
 }
 
@@ -15,6 +15,9 @@ void MainScene::press(QMouseEvent *event)
         start = end = event->pos();
         QGraphicsLineItem* lineItem = new QGraphicsLineItem();
         lineItem->setLine(start.x(),start.y(),end.x(),end.y());
+        QPen pen = QPen(QColor("red"));
+        pen.setWidth(4);
+        lineItem->setPen(pen);
         items.push_back(lineItem);//新建对象放入Qvector
         group->addToGroup(lineItem);//加入组来决定先后顺序
     }
@@ -104,8 +107,8 @@ void MainScene::restore()
 {
     if(!path.isEmpty())
     {
-//        clear();
-//        pixmapItem = new QGraphicsPixmapItem();
+        //        clear();
+        //        pixmapItem = new QGraphicsPixmapItem();
         deleteALL();
         removeItem(pixmapItem);
         group->addToGroup(pixmapItem);
@@ -139,7 +142,7 @@ void MainScene::deleteALL()
 {
     if(items.isEmpty())
     {
-//        QMessageBox::information(NULL,"Info","There's nothing to delete");
+        //        QMessageBox::information(NULL,"Info","There's nothing to delete");
     }
     else
     {
@@ -157,19 +160,29 @@ void MainScene::deleteALL()
 
 void MainScene::idwFunc()
 {
-    if(!image.isNull())
+    if(!image.isNull()&&!starts.isEmpty()&&!ends.isEmpty())
     {
         idw = IDW(starts,ends);
         removeItem(pixmapItem);
         update(0,0,this->width(),this->height());
         QImage backup = image,newImg = QImage(image.width()*2,image.height()*2,QImage::Format_RGB32);
         newImg.fill(Qt::white);
+
+        bool fill[newImg.width()][newImg.height()];
+        for(int i=0;i<newImg.width();i++)
+        {
+            for(int j=0;j<newImg.height();j++)
+            {
+                fill[i][j] = false;
+            }
+        }
         for (int i=0; i<image.width(); i++)
         {
             for (int j=0; j<image.height(); j++)
             {
                 QPoint point = QPoint(i,j);
                 point = idw.f(point);
+                fill[point.x()][point.y()] = true;
                 newImg.setPixel(point,backup.pixel(i,j));
             }
         }
@@ -177,19 +190,39 @@ void MainScene::idwFunc()
         {
             for (int j=1; j<newImg.height()-1; j++)
             {
-                if(newImg.pixelColor(i,j)==QColor("white")&&newImg.pixelColor(i-1,j)!=QColor("white")&&newImg.pixelColor(i+1,j)!=QColor("white"))
-//                    newImg.pixelColor(i,j)==QColor("white")&&(newImg.pixelColor(i-1,j)!=QColor("white")&&newImg.pixelColor(i+1,j)!=QColor("white")
-//                                            &&newImg.pixelColor(i,j+1)!=QColor("white")&&newImg.pixelColor(i,j-1)!=QColor("white"))
+                if(fill[i][j]==false)
                 {
-                    QColor temp1 = newImg.pixelColor(i-1,j+1);
-                    QColor temp2 = newImg.pixelColor(i,j+1);
-                    QColor temp3 = newImg.pixelColor(i+1,j+1);
-                    QColor temp4 = newImg.pixelColor(i-1,j);
-                    QColor temp5 = newImg.pixelColor(i+1,j);
-                    QColor temp6 = newImg.pixelColor(i-1,j-1);
-                    QColor temp7 = newImg.pixelColor(i,j-1);
-                    QColor temp8 = newImg.pixelColor(i+1,j-1);
-                    QColor avg = QColor((temp1.rgb()+temp2.rgb()+temp3.rgb()+temp4.rgb()+temp5.rgb()+temp6.rgb()+temp7.rgb()+temp8.rgb())/8.0);
+                    QVector<QColor> temp;
+                    if(fill[i-1][j+1]||fill[i][j+1]||fill[i+1][j+1]||fill[i-1][j]||fill[i+1][j]||fill[i-1][j-1]||fill[i][j-1]||fill[i+1][j-1])
+                    {
+                        for(int k = 0 ; k<3 ; k++)
+                        {
+                            for(int l = 0; l<3 ; l++)
+                            {
+                                if(fill[i-1+k][j-1+l])
+                                    temp.append(newImg.pixelColor(i-1+k,j-1+l));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for(int k = 0 ; k<3 ; k++)
+                        {
+                            for(int l = 0; l<3 ; l++)
+                            {
+                                if(!(k==1&&l==1))
+                                    temp.append(newImg.pixelColor(i-1+k,j-1+l));
+                            }
+                        }
+                    }
+                    int red=0,green=0,blue=0;
+                    for(int k=0;k<temp.size();k++)
+                    {
+                        red += temp[k].red();
+                        green += temp[k].green();
+                        blue += temp[k].blue();
+                    }
+                    QColor avg = QColor(red/temp.size(),green/temp.size(),blue/temp.size());
                     newImg.setPixelColor(i,j,avg);
                 }
             }
@@ -205,19 +238,29 @@ void MainScene::idwFunc()
 
 void MainScene::rbfFunc()
 {
-    if(!image.isNull())
+    if(!image.isNull()&&!starts.isEmpty()&&!ends.isEmpty())
     {
         rbf = RBF(starts,ends);
         removeItem(pixmapItem);
         update(0,0,this->width(),this->height());
         QImage backup = image,newImg = QImage(image.width()*2,image.height()*2,QImage::Format_RGB32);
         newImg.fill(Qt::white);
+
+        bool fill[newImg.width()][newImg.height()];
+        for(int i=0;i<newImg.width();i++)
+        {
+            for(int j=0;j<newImg.height();j++)
+            {
+                fill[i][j] = false;
+            }
+        }
         for (int i=0; i<image.width(); i++)
         {
             for (int j=0; j<image.height(); j++)
             {
                 QPoint point = QPoint(i,j);
                 point = rbf.F(point);
+                fill[point.x()][point.y()] = true;
                 newImg.setPixel(point,backup.pixel(i,j));
             }
         }
@@ -225,19 +268,39 @@ void MainScene::rbfFunc()
         {
             for (int j=1; j<newImg.height()-1; j++)
             {
-                if(newImg.pixelColor(i,j)==QColor("white")&&newImg.pixelColor(i-1,j)!=QColor("white")&&newImg.pixelColor(i+1,j)!=QColor("white"))
-//                    newImg.pixelColor(i,j)==QColor("white")&&(newImg.pixelColor(i-1,j)!=QColor("white")&&newImg.pixelColor(i+1,j)!=QColor("white")
-//                                            &&newImg.pixelColor(i,j+1)!=QColor("white")&&newImg.pixelColor(i,j-1)!=QColor("white"))
+                if(fill[i][j]==false)
                 {
-                    QColor temp1 = newImg.pixelColor(i-1,j+1);
-                    QColor temp2 = newImg.pixelColor(i,j+1);
-                    QColor temp3 = newImg.pixelColor(i+1,j+1);
-                    QColor temp4 = newImg.pixelColor(i-1,j);
-                    QColor temp5 = newImg.pixelColor(i+1,j);
-                    QColor temp6 = newImg.pixelColor(i-1,j-1);
-                    QColor temp7 = newImg.pixelColor(i,j-1);
-                    QColor temp8 = newImg.pixelColor(i+1,j-1);
-                    QColor avg = QColor((temp1.rgb()+temp2.rgb()+temp3.rgb()+temp4.rgb()+temp5.rgb()+temp6.rgb()+temp7.rgb()+temp8.rgb())/8.0);
+                    QVector<QColor> temp;
+                    if(fill[i-1][j+1]||fill[i][j+1]||fill[i+1][j+1]||fill[i-1][j]||fill[i+1][j]||fill[i-1][j-1]||fill[i][j-1]||fill[i+1][j-1])
+                    {
+                        for(int k = 0 ; k<3 ; k++)
+                        {
+                            for(int l = 0; l<3 ; l++)
+                            {
+                                if(fill[i-1+k][j-1+l])
+                                    temp.append(newImg.pixelColor(i-1+k,j-1+l));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for(int k = 0 ; k<3 ; k++)
+                        {
+                            for(int l = 0; l<3 ; l++)
+                            {
+                                if(!(k==1&&l==1))
+                                    temp.append(newImg.pixelColor(i-1+k,j-1+l));
+                            }
+                        }
+                    }
+                    int red=0,green=0,blue=0;
+                    for(int k=0;k<temp.size();k++)
+                    {
+                        red += temp[k].red();
+                        green += temp[k].green();
+                        blue += temp[k].blue();
+                    }
+                    QColor avg = QColor(red/temp.size(),green/temp.size(),blue/temp.size());
                     newImg.setPixelColor(i,j,avg);
                 }
             }

@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QGraphicsItemGroup>
 #include <QMessageBox>
+#include <QPen>
 #include "idw.h"
 #include "rbf.h"
 

@@ -51,6 +51,46 @@ $$
 
 # 1.IDW
 
+四角拉伸：
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/1.png)
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/2.png)
+
+四角压缩：
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/3.png)
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/4.png)
+
+三角形：
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/5.png)
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/6.png)
+
+## 2.RBF
+
+四角拉伸：
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/7.png)
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/8.png)
+
+四角压缩：
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/9.png)
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/10.png)
+
+三角形：
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/11.png)
+
+![](https://raw.githubusercontent.com/SouthEastUniversityLinuxClub/ImageWarping/master/12.png)
+
 
 
 # 四、总结
+
+​	通过这次作业，我深刻地体会到了精妙的图形变换离不开复杂数学算法的支持。并且我意识到如果之后碰见类似白缝问题这样的难以解决的问题，可以在有初步的想法之后实现一个雏形，然后根据雏形不断调整，最终可以调整出比较理想的结果。
